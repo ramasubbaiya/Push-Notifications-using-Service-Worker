@@ -1,0 +1,28 @@
+{
+  "name": "push-notifications",
+  "version": "1.0.0",
+  "description": "Creating an App for sending Push Notificatiobs using Service Worker",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ramasubbaiya/Push-Notifications-using-Service-Worker.git"
+  },
+  "keywords": [
+    "Service-Worker",
+    "Push-Notifications"
+  ],
+  "author": "Ramasubbaiya Adaikkalam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ramasubbaiya/Push-Notifications-using-Service-Worker/issues"
+  },
+  "homepage": "https://github.com/ramasubbaiya/Push-Notifications-using-Service-Worker#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-util": "^3.0.8"
+  }
+}
