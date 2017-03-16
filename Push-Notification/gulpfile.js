@@ -3,9 +3,7 @@ var connect = require('gulp-connect');
 
 gulp.task('connect', function() {
     connect.server({
-        port: 9090,
-        root: 'src',
-        livereload: true
+        port: 9090
     });
 });
 
@@ -18,4 +16,4 @@ gulp.task('watch', function() {
     gulp.watch(['./src/*.html'], ['html']);
 })
 
-gulp.task('default', ['connect', 'watch']);
+gulp.task('default', ['connect']);
