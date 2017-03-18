@@ -1,3 +1,7 @@
+import Push from 'push.js';
+
+console.log(Push);
+
 //make sure that Service Workers are supported.
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker

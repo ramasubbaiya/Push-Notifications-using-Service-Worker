@@ -23,6 +23,10 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-connect": "^5.0.0",
-    "gulp-util": "^3.0.8"
+    "gulp-util": "^3.0.8",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "push.js": "0.0.12"
   }
 }
