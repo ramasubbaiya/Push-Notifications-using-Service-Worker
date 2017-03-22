@@ -1,10 +1,5 @@
 'use strict';
 
-var Push = require('push.js');
-
-console.log(Push);
-console.log("TEs");
-
 //make sure that Service Workers are supported.
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js', { scope: './' }).then(function (registration) {

@@ -1,5 +1,3 @@
-const Push = require('push.js');
-
 //make sure that Service Workers are supported.
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker
@@ -37,7 +35,6 @@ var get = function(url) {
 
 get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
     .then(function(response) {
-        console.log(response);
         // There is an issue with the image being pulled from the API, so using a different one instead
         document.getElementsByClassName('targetImage')[0].src = response.url;
 
@@ -45,3 +42,5 @@ get('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
     .catch(function(err) {
         console.log("Error", err);
     })
+
+console.log(Push);

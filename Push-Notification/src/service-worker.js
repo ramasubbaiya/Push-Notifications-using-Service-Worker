@@ -1,4 +1,4 @@
-var cacheName = 'v3';
+var cacheName = 'v4';
 
 var cacheFiles = [
     './',
@@ -6,6 +6,7 @@ var cacheFiles = [
     './css/reset.css',
     './css/style.css',
     'https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic,700italic',
+    '/node_modules/push.js/push.min.js',
     './js/app.js'
 ];
 
