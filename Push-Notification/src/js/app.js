@@ -1,8 +1,7 @@
 'use strict';
 
-var test = require('node_modules/lodash');
-console.log(test);
 //make sure that Service Workers are supported.
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./service-worker.js', { scope: './' }).then(function (registration) {
         console.log("Service Worker Registered!");
@@ -13,6 +12,7 @@ if ('serviceWorker' in navigator) {
 
 // Function to perform HTTP request
 var get = function get(url) {
+
     return new Promise(function (resolve, reject) {
 
         var xhr = new XMLHttpRequest();

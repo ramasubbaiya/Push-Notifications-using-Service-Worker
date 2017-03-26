@@ -10,11 +10,11 @@ gulp.task('connect', function() {
 });
 
 gulp.task('es6', function() {
-    return gulp.src('dev/app.js')
+    return gulp.src('./src/app.js')
         .pipe(babel({
             presets: ['es2015']
         }))
-        .pipe(gulp.dest('./src/js/'));
+        .pipe(gulp.dest('build'));
 });
 
 gulp.task('html', function() {
@@ -23,12 +23,12 @@ gulp.task('html', function() {
 });
 
 gulp.task('js', function() {
-    gulp.src('dev/*.js')
+    gulp.src('./src/*.js')
         .pipe(connect.reload());
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/*.html', 'dev/*.js'], ['html', 'js']);
+    gulp.watch(['./src/*.html', './src/*.js'], ['html', 'js']);
 })
 
 gulp.task('default', ['connect', 'es6', 'watch']);
