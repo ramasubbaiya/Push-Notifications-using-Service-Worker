@@ -1,4 +1,4 @@
-//'use strict';
+'use strict';
 
 (function(window) {
 
@@ -10,15 +10,10 @@
             DENIED: 'denied'
         }
 
-        var protoypes = {
-            // Just create a property to our library object.
-            myCustomLog: function(thingToLog) {
-                console.log("My-Custom-Log > Type of variable : " + typeof(thingToLog));
-                console.log("My-Custom-Log > Is number : " + !isNaN(thingToLog));
-                console.log("My-Custom-Log > Length : " + (thingToLog).length);
+        // can I actually use Proptotype based property for methods
+        var protoypes = this;
 
-                return console.log(thingToLog);
-            },
+        var protoypes1 = {
             isNotificationSupported: function() {
                 return ('Notification' in window);
             },
@@ -52,7 +47,7 @@
 })(window);
 
 // Then we can call our custom function using
-Push.myCustomLog(["My library", "Rules"]);
+console.log(Push)
 
 // var Push = function() {
 //     // about
