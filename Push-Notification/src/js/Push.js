@@ -15,6 +15,16 @@
             description: 'This library is for push notification. It is a message that pops up on a mobile device and desktops. App publishers can send them at any time; users don\'t have to be in the app or using their devices to receive them.'
         }
 
+        /**
+         *  Get the browser information
+         *  Returns 
+         *      device  - desktop/mobile
+         *      name    - browser name
+         *      os      - Operating System
+         *      version - version of the browser
+         *          
+         *  @returns { device : string, name : string, os : string, version : string }
+         */
         let browserInfo = function() {
             var ua = navigator.userAgent,
                 tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [],
@@ -49,6 +59,10 @@
         }
 
         let __browser = browserInfo();
+
+        let isSubscribed = false;
+        let swRegistration = null;
+        let applicationServerPublicKey = `<your-server-public-key>`;
 
         // making a regular ajax call with promise
         var httpRequest = function(opts) {
@@ -113,8 +127,44 @@
             hasPermission: function() { // check whether the user has granted permission for Notifications
                 return Notification.permission;
             },
-            requestPermission: function() { // ask user for permission to allow notifiactions on their screen to annoy them
+            requestPermission: function() { // ask user for permission to allow notifiactions on their screen to start annoy them with notifications
                 return Notification.requestPermission();
+            },
+            initialize: function() {
+                if ('serviceWorker' in navigator && 'PushManager' in window) {
+                    console.log('Service Worker and Push is supported');
+
+                    // install the service worker file
+                    navigator.serviceWorker.register('./service-worker.js', { scope: './' })
+                        .then(function(swReg) {
+                            console.log('Service Worker is registered', swReg);
+
+                            swRegistration = swReg;
+                        })
+                        .catch(function(error) {
+                            console.error('Service Worker Error', error);
+                        });
+                } else {
+                    console.warn('Push messaging is not supported');
+                }
+
+                // Service Worker if not available skip this
+                if (swRegistration) {
+                    // Check whether the user is subscribed
+                    swRegistration.pushManager.getSubscription()
+                        .then(function(subscription) {
+                            isSubscribed = !(subscription === null);
+
+                            if (isSubscribed) {
+                                console.log('User IS subscribed.');
+                            } else {
+                                console.log('User is NOT subscribed.');
+                            }
+
+                            // update manually
+                            // this.requestPermission();
+                        });
+                }
             },
             sendNotification: function(data = 'Hi, There!') { // send notification
                 // permission can be changed at any moment of the time, so check every time before trying to sending
@@ -128,19 +178,51 @@
                 }
             },
             // TODO: Needs work
-            register: function() { // send subscriber data to the server to send seever push notification
+            subscribeUser: function() { // send subscriber data to the server to send seever push notification
                 if (this.requestPermission() === permission.DENIED) {
                     // Do nothing, as user can not given the permission for notification
-                    console.warn('Notifiaction disabled by the user');
+                    console.warn('Notification disabled by the user');
                 } else {
-                    // TODO
-                    httpRequest()
+                    const applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
+                    swRegistration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: applicationServerKey
+                        })
+                        .then(function(subscription) {
+                            console.log('User is subscribed.');
+
+                            this.updateSubscriptionOnServer(subscription); // send the user subscription data to application server
+
+                            isSubscribed = true;
+
+                            updateBtn();
+                        })
+                        .catch(function(err) {
+                            console.log('Failed to subscribe the user: ', err);
+                        });
                 }
 
             },
             // TODO: Needs work
-            unregister: function() {
+            unsubscribeUser: function() {
+                swRegistration.pushManager.getSubscription()
+                    .then(function(subscription) {
+                        if (subscription) {
+                            return subscription.unsubscribe();
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('Error unsubscribing', error);
+                    })
+                    .then(function() {
 
+                        // do we really need to unsubscribe from the server
+                        // aslo unsubscribe from all the topics by this user
+                        updateSubscriptionOnServer(null);
+
+                        console.log('User is unsubscribed.');
+                        isSubscribed = false;
+                    });
             },
             // TODO: Needs work
             subscribeForTopic: function(id, topic, attribute) { // user subscribes for specific topic(products interested, newsletter)
@@ -150,6 +232,10 @@
             },
             // TODO: Needs work
             unsubscribeForTopic: function(id, topic, attribute) { // user subscribes for specific topic(products interested, newsletter)
+
+            },
+            // TODO: Needs work
+            updateSubscriptionOnServer: function() {
 
             },
             testNotification: function() { // developer can test whether all the 3 checks works on their browser or any other browser
